@@ -1,0 +1,7 @@
+= File inspector 
+
+== Todo
+- Byte frequencies
+- File type
+- File Size
+- Entropy
