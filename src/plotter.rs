@@ -32,17 +32,16 @@ impl Plotter {
             .collect();
 
         for line in 0..height {
+            print!("|");
             for byte in 0..127 {
                 if relative_counts.get(&byte).unwrap_or(&0.0).clone() >= (height - line) as f64 {
                     print!("0");
-                }
-                else {
+                } else {
                     print!(" ");
                 }
             }
             println!();
         }
-
 
         Ok(())
     }
