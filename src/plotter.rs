@@ -20,9 +20,11 @@ impl Plotter {
             return Err(PlottingError::TerminalTooSmall.into());
         }
 
+        print!("╔");
         for _ in 0..max {
-            print!("_")
+            print!("═");
         }
+        print!("╗");
         println!();
 
         let max_count: f64 = counts
@@ -39,20 +41,23 @@ impl Plotter {
             .collect();
 
         for line in 0..height {
-            print!("|");
+            print!("║");
             for byte in 0..max {
                 if relative_counts.get(&byte).unwrap_or(&0.0).clone() >= (height - line) as f64 {
-                    print!("0");
+                    print!("▉");
                 } else {
                     print!(" ");
                 }
             }
-            print!("|");
+            print!("║");
             println!();
         }
+        
+        print!("╚");
         for _ in 0..max {
-            print!("_")
+            print!("═")
         }
+        print!("╝");
         println!();
         for byte in 0..max {
             if byte % 16 == 0 {
