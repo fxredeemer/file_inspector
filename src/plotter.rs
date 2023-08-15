@@ -12,7 +12,7 @@ impl Plotter {
             width.0, height.0
         );
         let width = width.0 as i32;
-        let height = height.0 as i32;
+        let height = height.0.clamp(0, 30) as i32;
 
         if width < 128 {
             return Err(PlottingError::TerminalTooSmall.into());
@@ -43,7 +43,6 @@ impl Plotter {
             println!();
         }
 
-        println!("{:?}", relative_counts);
 
         Ok(())
     }
