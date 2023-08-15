@@ -14,9 +14,16 @@ impl Plotter {
         let width = width.0 as i32;
         let height = height.0.clamp(0, 30) as i32;
 
+        let max = 255;
+
         if width < 128 {
             return Err(PlottingError::TerminalTooSmall.into());
         }
+
+        for _ in 0..max {
+            print!("_")
+        }
+        println!();
 
         let max_count: f64 = counts
             .iter()
@@ -33,14 +40,24 @@ impl Plotter {
 
         for line in 0..height {
             print!("|");
-            for byte in 0..127 {
+            for byte in 0..max {
                 if relative_counts.get(&byte).unwrap_or(&0.0).clone() >= (height - line) as f64 {
                     print!("0");
                 } else {
                     print!(" ");
                 }
             }
+            print!("|");
             println!();
+        }
+        for _ in 0..max {
+            print!("_")
+        }
+        println!();
+        for byte in 0..max {
+            if byte % 16 == 0 {
+                print!("{byte:<16}");
+            }
         }
 
         Ok(())
