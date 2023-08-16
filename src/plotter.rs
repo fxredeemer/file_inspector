@@ -14,9 +14,9 @@ impl Plotter {
         let width = width.0 as i32;
         let height = height.0.clamp(0, 30) as i32;
 
-        let max = 255;
+        let max = 127;
 
-        if width < 128 {
+        if width < 130 {
             return Err(PlottingError::TerminalTooSmall.into());
         }
 
@@ -42,17 +42,38 @@ impl Plotter {
 
         for line in 0..height {
             print!("║");
-            for byte in 0..max {
-                if relative_counts.get(&byte).unwrap_or(&0.0).clone() >= (height - line) as f64 {
-                    print!("▉");
+            let mut first_byte_set = false;
+            let mut second_byte_set = false;
+            
+            for byte in 0..max*2+1 {
+                let first_index = byte;
+                let second_index = byte + 1;
+
+                if byte % 2 == 0
+                {
+                    first_byte_set = relative_counts.get(&first_index).unwrap_or(&0.0).clone() >= (height - line) as f64;
                 } else {
-                    print!(" ");
+                    second_byte_set = relative_counts.get(&second_index).unwrap_or(&0.0).clone() >= (height - line) as f64;
+
+                    if first_byte_set && second_byte_set
+                    {
+                        print!("▉");
+                    }
+                    else if first_byte_set{
+                        print!("▌");
+                    }
+                    else if second_byte_set {
+                        print!("▐");
+                    }
+                    else {
+                        print!(" ");
+                    }
                 }
             }
             print!("║");
             println!();
         }
-        
+
         print!("╚");
         for _ in 0..max {
             print!("═")
