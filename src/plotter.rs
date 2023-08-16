@@ -44,28 +44,25 @@ impl Plotter {
             print!("║");
             let mut first_byte_set = false;
             let mut second_byte_set = false;
-            
-            for byte in 0..max*2+1 {
+
+            for byte in 0..max * 2 + 1 {
                 let first_index = byte;
                 let second_index = byte + 1;
 
-                if byte % 2 == 0
-                {
-                    first_byte_set = relative_counts.get(&first_index).unwrap_or(&0.0).clone() >= (height - line) as f64;
+                if byte % 2 == 0 {
+                    first_byte_set = relative_counts.get(&first_index).unwrap_or(&0.0).clone()
+                        >= (height - line) as f64;
                 } else {
-                    second_byte_set = relative_counts.get(&second_index).unwrap_or(&0.0).clone() >= (height - line) as f64;
+                    second_byte_set = relative_counts.get(&second_index).unwrap_or(&0.0).clone()
+                        >= (height - line) as f64;
 
-                    if first_byte_set && second_byte_set
-                    {
+                    if first_byte_set && second_byte_set {
                         print!("▉");
-                    }
-                    else if first_byte_set{
+                    } else if first_byte_set {
                         print!("▌");
-                    }
-                    else if second_byte_set {
+                    } else if second_byte_set {
                         print!("▐");
-                    }
-                    else {
+                    } else {
                         print!(" ");
                     }
                 }
@@ -80,9 +77,9 @@ impl Plotter {
         }
         print!("╝");
         println!();
-        for byte in 0..max {
+        for byte in 0..max * 2 + 1 {
             if byte % 16 == 0 {
-                print!("{byte:<16}");
+                print!("{byte:<8}");
             }
         }
 
