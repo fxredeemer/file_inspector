@@ -1,11 +1,6 @@
-[package]
-name = "file_inspector"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-[dependencies]
-anyhow = "1.0.73"
-assert_approx_eq = "1.1.0"
-clap = { version = "4.3.21", features = ["derive"] }
-terminal_size = "0.2.6"
-thiserror = "1.0.45"
+members = [ 
+    "file_inspector_lib",
+    "file_inspector_cli",
+]

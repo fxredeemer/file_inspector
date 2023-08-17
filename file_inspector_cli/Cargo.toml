@@ -1,0 +1,11 @@
+[package]
+name = "file_inspector_cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+file_inspector_lib = { path = "../file_inspector_lib" }
+anyhow = "1.0.73"
+clap = { version = "4.3.21", features = ["derive"] }
+terminal_size = "0.2.6"
+thiserror = "1.0.45"
