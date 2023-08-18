@@ -1,15 +1,14 @@
-use std::{error::Error, fs::File, io::Read};
-
-use clap::Parser;
-use plotter::Plotter;
-use file_inspector_lib::histogram::HistogramCreator;
-
 use crate::command_line::CommandLineArguments;
+use anyhow::Result;
+use clap::Parser;
+use file_inspector_lib::histogram::HistogramCreator;
+use plotter::Plotter;
+use std::{fs::File, io::Read};
 
 mod command_line;
 mod plotter;
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<()> {
     let command_line_args = CommandLineArguments::parse();
 
     let mut file = File::open(command_line_args.file)?;
@@ -21,7 +20,5 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let plotter = Plotter;
 
-    plotter.plot_hiostogram(histogram);
-
-    Ok(())
+    plotter.plot_hiostogram(histogram)
 }

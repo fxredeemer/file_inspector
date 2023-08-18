@@ -1,4 +1,3 @@
-use anyhow;
 use std::collections::{BTreeMap, HashMap};
 use terminal_size::terminal_size;
 
@@ -27,12 +26,11 @@ impl Plotter {
         print!("╗");
         println!();
 
-        let max_count: f64 = counts
+        let max_count: f64 = (*counts
             .iter()
             .map(|d| d.1)
             .max()
-            .ok_or(PlottingError::InvalidHistogram)?
-            .clone()
+            .ok_or(PlottingError::InvalidHistogram)?)
             .into();
 
         let relative_counts: BTreeMap<u8, f64> = counts
@@ -43,17 +41,16 @@ impl Plotter {
         for line in 0..height {
             print!("║");
             let mut first_byte_set = false;
-            let mut second_byte_set = false;
 
             for byte in 0..max * 2 + 1 {
                 let first_index = byte;
                 let second_index = byte + 1;
 
                 if byte % 2 == 0 {
-                    first_byte_set = relative_counts.get(&first_index).unwrap_or(&0.0).clone()
+                    first_byte_set = *relative_counts.get(&first_index).unwrap_or(&0.0)
                         >= (height - line) as f64;
                 } else {
-                    second_byte_set = relative_counts.get(&second_index).unwrap_or(&0.0).clone()
+                    let second_byte_set = *relative_counts.get(&second_index).unwrap_or(&0.0)
                         >= (height - line) as f64;
 
                     if first_byte_set && second_byte_set {

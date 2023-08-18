@@ -14,7 +14,7 @@ impl HistogramCreator {
             values.insert(byte, current_value + 1);
         }
 
-        return values;
+        values
     }
 }
 

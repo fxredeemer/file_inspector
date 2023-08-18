@@ -8,12 +8,9 @@ impl EntropyCalculator {
         let count_sum: i32 = data.iter().map(|d| d.1).sum();
 
         for byte in 0..u8::MAX {
-            match data.get(&byte) {
-                Some(count) => {
-                    let relative_count = f64::from(*count) / f64::from(count_sum);
-                    entropy += relative_count * relative_count.log2();
-                }
-                None => {}
+            if let Some(count) = data.get(&byte) {
+                let relative_count = f64::from(*count) / f64::from(count_sum);
+                entropy += relative_count * relative_count.log2();
             }
         }
 
