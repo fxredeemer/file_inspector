@@ -16,7 +16,7 @@ fn main() -> Result<()> {
     file.read_to_end(&mut buffer)?;
 
     let creator = HistogramCreator;
-    let histogram = creator.get_file_histogram(buffer);
+    let histogram = creator.get_file_histogram(&buffer);
 
     let plotter = Plotter;
 
