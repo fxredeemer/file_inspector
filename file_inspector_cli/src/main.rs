@@ -2,13 +2,11 @@ use std::{error::Error, fs::File, io::Read};
 
 use clap::Parser;
 use plotter::Plotter;
+use file_inspector_lib::histogram::HistogramCreator;
 
 use crate::command_line::CommandLineArguments;
-use crate::histogram::HistogramCreator;
 
 mod command_line;
-mod entropy;
-mod histogram;
 mod plotter;
 
 fn main() -> Result<(), Box<dyn Error>> {
