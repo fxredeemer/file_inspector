@@ -20,5 +20,5 @@ fn main() -> Result<()> {
 
     let plotter = Plotter;
 
-    plotter.plot_hiostogram(histogram)
+    plotter.plot_histogram(histogram)
 }

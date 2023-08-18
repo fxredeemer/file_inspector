@@ -4,34 +4,29 @@ use terminal_size::terminal_size;
 pub struct Plotter;
 
 impl Plotter {
-    pub fn plot_hiostogram(&self, counts: HashMap<u8, i32>) -> anyhow::Result<()> {
+    pub fn plot_histogram(&self, counts: HashMap<u8, i32>) -> anyhow::Result<()> {
         let (width, height) = terminal_size().ok_or(PlottingError::TerminalSizeNotDeterminable)?;
-        println!(
-            "The terminal is {} cols wide and {} lines tall",
-            width.0, height.0
-        );
-        let width = width.0 as i32;
-        let height = height.0.clamp(0, 30) as i32;
 
-        let max = 127;
+        let width = width.0 as i32;
+        let height = height.0.clamp(20, 40) as i32;
 
         if width < 130 {
-            return Err(PlottingError::TerminalTooSmall.into());
+            Err(PlottingError::TerminalTooSmall)?;
         }
 
+        let max = 127;
         print!("╔");
         for _ in 0..max {
             print!("═");
         }
-        print!("╗");
-        println!();
+        println!("╗");
 
         let max_count: f64 = (*counts
             .iter()
             .map(|d| d.1)
             .max()
             .ok_or(PlottingError::InvalidHistogram)?)
-            .into();
+        .into();
 
         let relative_counts: BTreeMap<u8, f64> = counts
             .into_iter()
@@ -40,18 +35,17 @@ impl Plotter {
 
         for line in 0..height {
             print!("║");
+
             let mut first_byte_set = false;
 
             for byte in 0..max * 2 + 1 {
-                let first_index = byte;
-                let second_index = byte + 1;
+                let line_threshold = (height - line) as f64;
 
                 if byte % 2 == 0 {
-                    first_byte_set = *relative_counts.get(&first_index).unwrap_or(&0.0)
-                        >= (height - line) as f64;
+                    first_byte_set = *relative_counts.get(&byte).unwrap_or(&0.0) >= line_threshold;
                 } else {
-                    let second_byte_set = *relative_counts.get(&second_index).unwrap_or(&0.0)
-                        >= (height - line) as f64;
+                    let second_byte_set =
+                        *relative_counts.get(&(byte + 1)).unwrap_or(&0.0) >= line_threshold;
 
                     if first_byte_set && second_byte_set {
                         print!("▉");
@@ -64,16 +58,15 @@ impl Plotter {
                     }
                 }
             }
-            print!("║");
-            println!();
+            println!("║");
         }
 
         print!("╚");
         for _ in 0..max {
             print!("═")
         }
-        print!("╝");
-        println!();
+        println!("╝");
+
         for byte in 0..max * 2 + 1 {
             if byte % 16 == 0 {
                 print!("{byte:<8}");
